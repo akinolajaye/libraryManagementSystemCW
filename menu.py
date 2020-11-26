@@ -54,6 +54,30 @@ def createListbox(frame,w,h):
 
     display.pack(side=tk.TOP,fill='both',expand=1)
 
+    return display
+
+def insertFromDisplay(widget,entry):
+    """
+    this is a function to insert data into the entry
+    fields when selected from the display box
+    """
+    try:
+        j=0
+        search=widget.curselection()[0] # gets the line index of the data selected
+        data=widget.get(search) #uses the index returns tuples which hold selected data
+
+        for i in entry.winfo_children():# loops through widgets in frame "entry in this case"
+
+            if isinstance(i,ttk.Entry): #checks if the widget is an entry widget
+                i.delete(0,tk.END) #empties the entry field
+                i.insert(tk.END,data[j]) #inserts given data into the entry fields
+                j+=1
+
+
+    except Exception as err:
+        pass
+
+
 
 def createButtons(frame):
     """
@@ -85,7 +109,7 @@ createWindow(win,title)
 entry_frame, display_frame,button_frame=createFrames(win)
 createLabels(entry_frame)
 createEntrys(entry_frame,book_title,15)
-createListbox(display_frame,20,10)
+display=createListbox(display_frame,20,10)
 search,exit=createButtons(button_frame)
 
 exit.configure(command=lambda:exitProgram(win,title))
