@@ -74,7 +74,7 @@ def insertFromDisplay(widget,entry):
                 j+=1
 
 
-    except Exception as err:
+    except:
         pass
 
 
