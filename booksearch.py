@@ -1,47 +1,12 @@
+import database as db
+library_db=db.dataToDict("database.txt")
+def searchBook(element,field):
+    search_result=[]
+    for i in range(len(library_db)):
+        if library_db[i+1][element]==field:
+            search_result.append(list(library_db[i+1].values()))
 
-def dataToDict(filename):
-    """
-    converts data from the text database file 
-    into a dictionary that can be interpreted
-    byt the python program
-    """
-    database={}
-    file=open(filename,"r+") #Opens the text file in python
-    line_length=len(file.readlines())#count the num of lines in the txt file
-    file.seek(0)
-
-    data_str=file.readline() # reads the first line of the txt file
-    data_str=data_str.strip("\n") #removes leading and trailing white space
-    data_elements=data_str.split(",") # converts the text into a list 
-
-    
-    
-    """
-    this for loop  goes through the text file and puts
-    each line of text from the txt file(data record) into a 
-    dictionary where element is the key and field is the value
-    eg: data record={date element: data field} = {Title : Book 1}
-    this is then put into another dictionary where the key is the id
-    and the value is the data record eg: {1 : {Title: Book1}...}
-    """
-    for i in range(line_length-1):#loop on the amount of records in txt
-        data_record={} #empty dict to store current data record
-        data_str=file.readline()#retrieves the data field from txt file
-
-        data_str=data_str.strip("\n")
-        data_field=data_str.split(",")
-
-        for j in range(len(data_elements)):#loop on num of data elements
-            data_record[data_elements[j]]= data_field[j] 
-
-        database[(i+1)]=data_record
-
-
-    return database
-
-datbase=dataToDict("database.txt")
-print(datbase)
-
-
-
-
+    print(search_result)
+    return search_result
+            
+        

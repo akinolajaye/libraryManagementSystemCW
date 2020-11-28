@@ -2,9 +2,12 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import scrolledtext as st
 from tkinter import messagebox as mbx
+import booksearch as bsrch
 win=tk.Tk()#creates an instance of the tkinter module
 title='LibraryManagementSystem'
 book_title=tk.StringVar()#sets book title as a string variable
+
+
 
 def createWindow(window,title):#function to setup the window
     window.title(title) #sets the window title
@@ -36,6 +39,8 @@ def createLabels(frame): #function to create label for entry fields
 def createEntrys(frame,var,w):#function to create entry field widgets
     bk_title_entry=ttk.Entry(frame,textvariable=var,width=w)
     bk_title_entry.grid(row=0,column=1)
+
+    return bk_title_entry
 
 def createListbox(frame,w,h):
     """
@@ -105,14 +110,21 @@ def exitProgram(window,title):
 
 
 
-createWindow(win,title)
-entry_frame, display_frame,button_frame=createFrames(win)
-createLabels(entry_frame)
-createEntrys(entry_frame,book_title,15)
-display=createListbox(display_frame,20,10)
-search,exit=createButtons(button_frame)
+createWindow(win,title)#creates window
 
+entry_frame, display_frame,button_frame=createFrames(win)#creates frames
+
+createLabels(entry_frame)#creates labels
+
+bk_title_entry=createEntrys(entry_frame,book_title,15)#creates entry fields
+
+display=createListbox(display_frame,20,10)  
+
+
+search,exit=createButtons(button_frame)
+search.configure(command=lambda:bsrch.searchBook("Title",bk_title_entry.get()))
 exit.configure(command=lambda:exitProgram(win,title))
+
 #^^^binds the function 'exitProgram' to the button 'exit'
 
 win.mainloop()
