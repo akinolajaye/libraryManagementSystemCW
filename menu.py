@@ -5,7 +5,11 @@ from tkinter import messagebox as mbx
 import booksearch as bsrch
 win=tk.Tk()#creates an instance of the tkinter module
 title='LibraryManagementSystem'
-book_title=tk.StringVar()#sets book title as a string variable
+isbn=tk.StringVar()#sets isbn as a string variable
+title=tk.StringVar()
+author=tk.StringVar()
+purchase_date=tk.StringVar()
+member_id=tk.StringVar()
 
 
 
@@ -33,14 +37,40 @@ def createFrames(window): #function to create all the frames that will be used
     return entry_frame,display_frame,button_frame
 
 def createLabels(frame): #function to create label for entry fields
-    bk_title_lbl=ttk.Label(frame,text="Book Title:")
-    bk_title_lbl.grid(row=0,column=0)#organises widget in grid form
+    isbn_lbl=ttk.Label(frame,text="ISBN:")
+    isbn_lbl.grid(row=0,column=0)#organises widget in grid form
 
-def createEntrys(frame,var,w):#function to create entry field widgets
-    bk_title_entry=ttk.Entry(frame,textvariable=var,width=w)
-    bk_title_entry.grid(row=0,column=1)
+    title_lbl=ttk.Label(frame,text="Book Title:")
+    title_lbl.grid(row=1,column=0)
 
-    return bk_title_entry
+    author_lbl=ttk.Label(frame,text="Author:")
+    author_lbl.grid(row=2,column=0)
+
+    purchase_date_lbl=ttk.Label(frame,text="Purchase Date:")
+    purchase_date_lbl.grid(row=3,column=0)
+
+    member_id_lbl=ttk.Label(frame,text="Member ID:")
+    member_id_lbl.grid(row=4,column=0)
+
+def createEntrys(frame,w):#function to create entry field widgets
+    
+    isbn_entry=ttk.Entry(frame,textvariable=isbn,width=w)
+    isbn_entry.grid(row=0,column=1)
+
+    title_entry=ttk.Entry(frame,textvariable=title,width=w)
+    title_entry.grid(row=1,column=1)
+
+    author_entry=ttk.Entry(frame,textvariable=author,width=w)
+    author_entry.grid(row=2,column=1)
+
+    purchase_date_entry=ttk.Entry(frame,textvariable=purchase_date,width=w)
+    purchase_date_entry.grid(row=3,column=1)
+
+    member_id_entry=ttk.Entry(frame,textvariable=member_id,width=w)
+    member_id_entry.grid(row=4,column=1)
+
+    return isbn_entry,title_entry,author_entry,\
+        purchase_date_entry,member_id_entry 
 
 def createListbox(frame,w,h):
     """
@@ -61,7 +91,7 @@ def createListbox(frame,w,h):
 
     return display
 
-def insertFromDisplay(widget,entry):
+def insertFromDisplay(event,widget,frame):
     """
     this is a function to insert data into the entry
     fields when selected from the display box
@@ -71,7 +101,7 @@ def insertFromDisplay(widget,entry):
         search=widget.curselection()[0] # gets the line index of the data selected
         data=widget.get(search) #uses the index returns tuples which hold selected data
 
-        for i in entry.winfo_children():# loops through widgets in frame "entry in this case"
+        for i in frame.winfo_children():# loops through widgets in frame "entry in this case"
 
             if isinstance(i,ttk.Entry): #checks if the widget is an entry widget
                 i.delete(0,tk.END) #empties the entry field
@@ -116,15 +146,22 @@ entry_frame, display_frame,button_frame=createFrames(win)#creates frames
 
 createLabels(entry_frame)#creates labels
 
-bk_title_entry=createEntrys(entry_frame,book_title,15)#creates entry fields
+isbn_entry,title_entry,author_entry,purchase_date_entry,\
+    member_id_entry =createEntrys(entry_frame,15)#creates entry fields
 
-display=createListbox(display_frame,20,10)  
-
+display=createListbox(display_frame,20,10)#creates listbox
+display.bind('<<ListboxSelect>>',\
+     lambda event:insertFromDisplay(event,display,entry_frame))  
+#^^^binds a function to the event when data in the list box gets selected
+#^^after data is selected on the list box it is inserted into entry fields
 
 search,exit=createButtons(button_frame)
-search.configure(command=lambda:bsrch.searchBook("Title",bk_title_entry.get()))
-exit.configure(command=lambda:exitProgram(win,title))
 
+
+search.configure(command=lambda:bsrch.searchBook("Title",title_entry.get(),display))
+#^^^ binds the function 'searchbook' to the button 'search'
+
+exit.configure(command=lambda:exitProgram(win,title))
 #^^^binds the function 'exitProgram' to the button 'exit'
 
 win.mainloop()
