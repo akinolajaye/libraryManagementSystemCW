@@ -1,4 +1,4 @@
-def dataToDict(filename):
+def readDatabase(filename):
     """
     converts data from the text database file 
     into a dictionary that can be interpreted
@@ -35,5 +35,26 @@ def dataToDict(filename):
 
         database[(i+1)]=data_record
 
+    file.close()
 
     return database
+
+def writeDatabase(database,filename):
+    """
+    this is a function the write all data from the
+    dictionary to the txt file. this is used for updating
+    the database regularly
+    """
+    file=open(filename,"w+")
+    data_elements=list(database[1].keys())#gets the elements
+    data_elements= ",".join(data_elements)#formats the data
+    file.write(data_elements+"\n")#writes the data to the file
+
+    for i in range(len(database)):#loops through all records
+        data_str=list(database[i+1].values())
+        data_str=",".join(data_str)
+        file.write(data_str+"\n")
+
+
+    file.close()
+

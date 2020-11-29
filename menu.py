@@ -3,8 +3,9 @@ from tkinter import ttk
 from tkinter import scrolledtext as st
 from tkinter import messagebox as mbx
 import booksearch as bsrch
+import bookcheckout as bcheck
 win=tk.Tk()#creates an instance of the tkinter module
-title='LibraryManagementSystem'
+win_title='LibraryManagementSystem'
 isbn=tk.StringVar()#sets isbn as a string variable
 title=tk.StringVar()
 author=tk.StringVar()
@@ -122,9 +123,12 @@ def createButtons(frame):
     search=ttk.Button(frame,text="Search")
     search.grid(row=0,column=0)
 
+    checkout=ttk.Button(frame,text="Checkout")
+    checkout.grid(row=0,column=1)
+
     exit=ttk.Button(frame,text="Exit")
-    exit.grid(row=0,column=1)
-    return search,exit
+    exit.grid(row=0,column=2)
+    return search,checkout,exit
 
 def exitProgram(window,title):
     """
@@ -140,7 +144,7 @@ def exitProgram(window,title):
 
 
 
-createWindow(win,title)#creates window
+createWindow(win,win_title)#creates window
 
 entry_frame, display_frame,button_frame=createFrames(win)#creates frames
 
@@ -155,11 +159,16 @@ display.bind('<<ListboxSelect>>',\
 #^^^binds a function to the event when data in the list box gets selected
 #^^after data is selected on the list box it is inserted into entry fields
 
-search,exit=createButtons(button_frame)
+search,checkout,exit=createButtons(button_frame)#creates buttons
 
 
-search.configure(command=lambda:bsrch.searchBook("Title",title_entry.get(),display))
+search.configure(command=lambda:bsrch.searchBook\
+    ("Title",title_entry.get(),display))
 #^^^ binds the function 'searchbook' to the button 'search'
+
+checkout.configure(command=lambda:bcheck.checkoutBook\
+    ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get(),display))
+
 
 exit.configure(command=lambda:exitProgram(win,title))
 #^^^binds the function 'exitProgram' to the button 'exit'
