@@ -149,8 +149,6 @@ def exitProgram(window,title):
         window.destroy()
 
 
-
-
 createWindow(win,win_title)#creates window
 
 entry_frame, display_frame,button_frame=createFrames(win)#creates frames
