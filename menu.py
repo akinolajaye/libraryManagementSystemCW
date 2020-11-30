@@ -4,6 +4,7 @@ from tkinter import scrolledtext as st
 from tkinter import messagebox as mbx
 import booksearch as bsrch
 import bookcheckout as bcheck
+import database as db
 win=tk.Tk()#creates an instance of the tkinter module
 win_title='LibraryManagementSystem'
 isbn=tk.StringVar()#sets isbn as a string variable
@@ -114,21 +115,27 @@ def insertFromDisplay(event,widget,frame):
         pass
 
 
-
-def createButtons(frame):
+def createButtons(frame,filename,display):
     """
     creates buttons that will perform functions
     for the program
     """
-    search=ttk.Button(frame,text="Search")
+    
+
+    search=ttk.Button(frame,text="Search",command=lambda:bsrch.searchBook\
+        ("Title",title_entry.get(),filename,display))
+    #^^^ binds the function 'searchbook' to the button 'search')
     search.grid(row=0,column=0)
 
-    checkout=ttk.Button(frame,text="Checkout")
+    checkout=ttk.Button(frame,text="Checkout",command=lambda:bcheck.checkoutBook\
+    ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
+        ,filename,display))
     checkout.grid(row=0,column=1)
 
-    exit=ttk.Button(frame,text="Exit")
+    exit=ttk.Button(frame,text="Exit",command=lambda:exitProgram(win,win_title))
+    #^^^binds the function 'exitProgram' to the button 'exit')
     exit.grid(row=0,column=2)
-    return search,checkout,exit
+
 
 def exitProgram(window,title):
     """
@@ -140,7 +147,7 @@ def exitProgram(window,title):
     if close >0: #Checks if close is yes or no, yes being 1
         window.quit()
         window.destroy()
-        
+
 
 
 
@@ -159,18 +166,7 @@ display.bind('<<ListboxSelect>>',\
 #^^^binds a function to the event when data in the list box gets selected
 #^^after data is selected on the list box it is inserted into entry fields
 
-search,checkout,exit=createButtons(button_frame)#creates buttons
+createButtons(button_frame,"database.txt",display)#creates buttons
 
-
-search.configure(command=lambda:bsrch.searchBook\
-    ("Title",title_entry.get(),display))
-#^^^ binds the function 'searchbook' to the button 'search'
-
-checkout.configure(command=lambda:bcheck.checkoutBook\
-    ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get(),display))
-
-
-exit.configure(command=lambda:exitProgram(win,title))
-#^^^binds the function 'exitProgram' to the button 'exit'
 
 win.mainloop()
