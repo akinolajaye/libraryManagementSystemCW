@@ -79,14 +79,40 @@ def getDate():
 
     return date
 
-def checkout_Log(id):
+def checkoutLog(id):
     """
-    this is a function to write data to a log file 
+    this is a function to write data to a log dictionary 
     once a book is checked out
     """
-    log_data={"Book ID":id,"Checkout Date":getDate(),"Return Date":"0"}
     log_db=readDatabase("logfile.txt")
+
+    log_data={"ISBN":id,"Checkout Date":str(getDate()),"Return Date":"0"} 
     log_db[(len(log_db)+1)]=log_data#adds the log data to dictionary
 
     return log_db
             
+
+def returnLog(id):
+    """
+    this is a function to write data to a log dictionary 
+    once a book is returned out
+    """
+
+    log_db=readDatabase("logfile.txt")
+
+    for i in range(len(log_db)):
+        if log_db[i+1]["ISBN"]==id and \
+            log_db[i+1]["Return Date"]=="0":#checks if books isnt returned
+            log_db[i+1]["Return Date"]=str(getDate())
+            break
+
+
+    return log_db
+
+
+
+
+
+
+
+    

@@ -2,7 +2,7 @@ import database as db
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbx
-import datetime
+
 
 def validID(id,table):
     """
@@ -51,7 +51,7 @@ def checkoutBook(isbn,id,member_id,member,display):
             for i in valid_results:
                 display.insert(tk.END,i)# inserts search results on the display box
       
-            log_db=db.checkout_Log(id)
+            log_db=db.checkoutLog(id)
             db.writeDatabase(log_db,"logfile.txt")
             db.writeDatabase(library_db,"database.txt")
 

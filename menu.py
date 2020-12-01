@@ -4,6 +4,7 @@ from tkinter import scrolledtext as st
 from tkinter import messagebox as mbx
 import booksearch as bsrch
 import bookcheckout as bcheck
+import bookreturn as breturn
 import database as db
 win=tk.Tk()#creates an instance of the tkinter module
 win_title='LibraryManagementSystem'
@@ -132,9 +133,15 @@ def createButtons(frame,display):
         ,display))
     checkout.grid(row=0,column=1)
 
+
+    return_bk=ttk.Button(frame,text="Return",command=lambda:breturn.returnBook\
+    ('ISBN',isbn_entry.get(),"Member ID","0"\
+        ,display))
+    return_bk.grid(row=0,column=2)
+
     exit=ttk.Button(frame,text="Exit",command=lambda:exitProgram(win,win_title))
     #^^^binds the function 'exitProgram' to the button 'exit')
-    exit.grid(row=0,column=2)
+    exit.grid(row=0,column=3)
 
 
 def exitProgram(window,title):
@@ -158,7 +165,7 @@ createLabels(entry_frame)#creates labels
 isbn_entry,title_entry,author_entry,purchase_date_entry,\
     member_id_entry =createEntrys(entry_frame,15)#creates entry fields
 
-display=createListbox(display_frame,20,10)#creates listbox
+display=createListbox(display_frame,100,10)#creates listbox
 display.bind('<<ListboxSelect>>',\
      lambda event:insertFromDisplay(event,display,entry_frame))  
 #^^^binds a function to the event when data in the list box gets selected
