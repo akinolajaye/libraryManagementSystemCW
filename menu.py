@@ -115,7 +115,7 @@ def insertFromDisplay(event,widget,frame):
         pass
 
 
-def createButtons(frame,filename,display):
+def createButtons(frame,display):
     """
     creates buttons that will perform functions
     for the program
@@ -123,13 +123,13 @@ def createButtons(frame,filename,display):
     
 
     search=ttk.Button(frame,text="Search",command=lambda:bsrch.searchBook\
-        ("Title",title_entry.get(),filename,display))
+        ("Title",title_entry.get(),display))
     #^^^ binds the function 'searchbook' to the button 'search')
     search.grid(row=0,column=0)
 
     checkout=ttk.Button(frame,text="Checkout",command=lambda:bcheck.checkoutBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,filename,display))
+        ,display))
     checkout.grid(row=0,column=1)
 
     exit=ttk.Button(frame,text="Exit",command=lambda:exitProgram(win,win_title))
@@ -164,7 +164,7 @@ display.bind('<<ListboxSelect>>',\
 #^^^binds a function to the event when data in the list box gets selected
 #^^after data is selected on the list box it is inserted into entry fields
 
-createButtons(button_frame,"database.txt",display)#creates buttons
+createButtons(button_frame,display)#creates buttons
 
 
 win.mainloop()

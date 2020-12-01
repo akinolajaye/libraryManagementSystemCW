@@ -2,6 +2,7 @@ import database as db
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbx
+import datetime
 
 def validID(id,table):
     """
@@ -20,13 +21,13 @@ def validID(id,table):
     return False
 
 
-def checkoutBook(isbn,id,member_id,member,filename,display):
+def checkoutBook(isbn,id,member_id,member,display):
     
     """
     this is a function the check out books first by checking if the book
     is eligible to be checked out and thus updating the database accordingy
     """
-    library_db=db.readDatabase(filename)
+    library_db=db.readDatabase("database.txt")
     valid_results=[]
     valid_id=validID(id,library_db)
     if not valid_id:
@@ -49,8 +50,13 @@ def checkoutBook(isbn,id,member_id,member,filename,display):
             display.delete(0,tk.END)#emptys out the display box
             for i in valid_results:
                 display.insert(tk.END,i)# inserts search results on the display box
+      
+            log_db=db.checkout_Log(id)
+            db.writeDatabase(log_db,"logfile.txt")
+            db.writeDatabase(library_db,"database.txt")
 
-    db.writeDatabase(library_db,filename)
+
+ 
 
 
 

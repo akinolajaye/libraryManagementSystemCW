@@ -1,0 +1,2 @@
+Book ID,Checkout Date,Return Date
+9783161484105,2020-12-01,0

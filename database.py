@@ -1,3 +1,6 @@
+import datetime
+
+
 def readDatabase(filename):
     """
     converts data from the text database file 
@@ -23,21 +26,25 @@ def readDatabase(filename):
     this is then put into another dictionary where the key is the id
     and the value is the data record eg: {1 : {Title: Book1}...}
     """
-    for i in range(line_length-1):#loop on the amount of records in txt
-        data_record={} #empty dict to store current data record
-        data_str=file.readline()#retrieves the data field from txt file
 
-        data_str=data_str.strip("\n")
-        data_field=data_str.split(",")
+    if line_length-1 !=0:
+        for i in range(line_length-1):#loop on the amount of records in txt
+            data_record={} #empty dict to store current data record
+            data_str=file.readline()#retrieves the data field from txt file
 
-        for j in range(len(data_elements)):#loop on num of data elements
-            data_record[data_elements[j]]= data_field[j] 
+            data_str=data_str.strip("\n")
+            data_field=data_str.split(",")
 
-        database[(i+1)]=data_record
+            for j in range(len(data_elements)):#loop on num of data elements
+                data_record[data_elements[j]]= data_field[j] 
 
-    file.close()
+            database[(i+1)]=data_record
+
+        file.close()
 
     return database
+
+
 
 def writeDatabase(database,filename):
     """
@@ -45,16 +52,41 @@ def writeDatabase(database,filename):
     dictionary to the txt file. this is used for updating
     the database regularly
     """
+
+    file=open(filename,"r+") #Opens the text file in python
+
+    data_str=file.readline() # reads the first line of the txt file
+    data_str=data_str.strip("\n") #removes leading and trailing white space
+    data_elements=data_str.split(",") # converts the text into a list 
+    data_elements=",".join(data_elements)#formats the data to a string
+    file.close()
+
     file=open(filename,"w+")
-    data_elements=list(database[1].keys())#gets the elements
-    data_elements= ",".join(data_elements)#formats the data
     file.write(data_elements+"\n")#writes the data to the file
 
     for i in range(len(database)):#loops through all records
         data_str=list(database[i+1].values())
         data_str=",".join(data_str)
+
         file.write(data_str+"\n")
-
-
     file.close()
 
+def getDate():
+    """
+    gets the current date
+    """
+    date=str(datetime.date.today())
+
+    return date
+
+def checkout_Log(id):
+    """
+    this is a function to write data to a log file 
+    once a book is checked out
+    """
+    log_data={"Book ID":id,"Checkout Date":getDate(),"Return Date":"0"}
+    log_db=readDatabase("logfile.txt")
+    log_db[(len(log_db)+1)]=log_data#adds the log data to dictionary
+
+    return log_db
+            
