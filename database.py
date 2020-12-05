@@ -42,6 +42,8 @@ def readDatabase(filename):
 
         file.close()
 
+    else:
+            file.close()
     return database
 
 
@@ -79,16 +81,42 @@ def getDate():
 
     return date
 
-def checkoutLog(id):
+def checkoutLog(id,lib):
     """
     this is a function to write data to a log dictionary 
     once a book is checked out
     """
     log_db=readDatabase("logfile.txt")
 
-    log_data={"ISBN":id,"Checkout Date":str(getDate()),"Return Date":"0"} 
+
+    for i in range(len(lib)):
+        if lib[i+1]["ISBN"]==id:
+            member_id=lib[i+1]["Member ID"]# gets the current member id
+            bk_title=lib[i+1]["Title"]#gets the book title based on id
+            break
+
+        
+
+    log_data={"ISBN":id,"Member ID":member_id,"Title":bk_title,\
+        "Checkout Date":str(getDate()),"Return Date":"0","Borrows":"0"}
+
     log_db[(len(log_db)+1)]=log_data#adds the log data to dictionary
 
+    """
+    the statement below is a list comprehension that returns a list of 
+    the amount of borrows that has occured for a book title 
+    the maximum value in the list being the current number of times
+    the book has been borrowed
+    when the book is borrowed again then the statement will add 1 to the max
+    The amount of borrowers is based on the title
+    """
+
+    borrows=([int(log_db[i+1]["Borrows"]) for i in range(len(log_db)) \
+        if log_db[i+1]["Title"]==bk_title])#gets a list of the number of
+                                           #borrows for the given book title
+    log_db[len(log_db)]["Borrows"]=str(max(borrows)+1)#
+
+        
     return log_db
             
 
@@ -108,6 +136,7 @@ def returnLog(id):
 
 
     return log_db
+
 
 
 

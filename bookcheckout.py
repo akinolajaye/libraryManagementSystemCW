@@ -51,7 +51,7 @@ def checkoutBook(isbn,id,member_id,member,display):
             for i in valid_results:
                 display.insert(tk.END,i)# inserts search results on the display box
       
-            log_db=db.checkoutLog(id)
+            log_db=db.checkoutLog(id,library_db)
             db.writeDatabase(log_db,"logfile.txt")
             db.writeDatabase(library_db,"database.txt")
 
