@@ -5,6 +5,7 @@ from tkinter import messagebox as mbx
 import booksearch as bsrch
 import bookcheckout as bcheck
 import bookreturn as breturn
+import bookweed as bweed
 import database as db
 win=tk.Tk()#creates an instance of the tkinter module
 win_title='LibraryManagementSystem'
@@ -15,10 +16,11 @@ purchase_date=tk.StringVar()
 member_id=tk.StringVar()
 
 
-
+ 
 def createWindow(window,title):#function to setup the window
     window.title(title) #sets the window title
-    window.geometry("500x500")#sets defualt window size
+    window.geometry("700x280")#sets defualt window size
+    window.resizable(0,0)
 
 def createFrames(window): #function to create all the frames that will be used
     #creates a frame that will be used as a container for other frames
@@ -62,6 +64,11 @@ def createEntrys(frame,w):#function to create entry field widgets
 
     title_entry=ttk.Entry(frame,textvariable=title,width=w)
     title_entry.grid(row=1,column=1)
+
+    search=ttk.Button(frame,text="Search",command=lambda:bsrch.searchBook\
+        ("Title",title_entry.get(),display))
+    #^^^ binds the function 'searchbook' to the button 'search')
+    search.grid(row=1,column=2)
 
     author_entry=ttk.Entry(frame,textvariable=author,width=w)
     author_entry.grid(row=2,column=1)
@@ -111,6 +118,8 @@ def insertFromDisplay(event,widget,frame):
                 i.insert(tk.END,data[j]) #inserts given data into the entry fields
                 j+=1
 
+                
+
 
     except:
         pass
@@ -121,29 +130,28 @@ def createButtons(frame,display):
     creates buttons that will perform functions
     for the program
     """
-    
 
-    search=ttk.Button(frame,text="Search",command=lambda:bsrch.searchBook\
-        ("Title",title_entry.get(),display))
-    #^^^ binds the function 'searchbook' to the button 'search')
-    search.grid(row=0,column=0)
 
     checkout=ttk.Button(frame,text="Checkout",command=lambda:bcheck.checkoutBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,display))
+        ,display,entry_array))
     checkout.grid(row=0,column=1)
 
 
     return_bk=ttk.Button(frame,text="Return",command=lambda:breturn.returnBook\
-    ('ISBN',isbn_entry.get(),"Member ID","0"\
-        ,display))
+    ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
+        ,display,entry_array))
     return_bk.grid(row=0,column=2)
+
+    weed=ttk.Button(frame,text="Weed",command=lambda:bweed.bookweed())
+
+    weed.grid(row=0,column=3)
 
     exit=ttk.Button(frame,text="Exit",command=lambda:exitProgram(win,win_title))
     #^^^binds the function 'exitProgram' to the button 'exit')
-    exit.grid(row=0,column=3)
+    exit.grid(row=0,column=4)
 
-
+ 
 def exitProgram(window,title):
     """
     function to exit the program
@@ -165,7 +173,10 @@ createLabels(entry_frame)#creates labels
 isbn_entry,title_entry,author_entry,purchase_date_entry,\
     member_id_entry =createEntrys(entry_frame,15)#creates entry fields
 
-display=createListbox(display_frame,100,10)#creates listbox
+entry_array=[i for i in entry_frame.winfo_children() if isinstance(i,ttk.Entry)]
+
+
+display=createListbox(display_frame,50,12)#creates listbox
 display.bind('<<ListboxSelect>>',\
      lambda event:insertFromDisplay(event,display,entry_frame))  
 #^^^binds a function to the event when data in the list box gets selected
