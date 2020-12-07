@@ -76,9 +76,10 @@ def bookweed():
 
     """
     The criteria for a book to get weeded is
-    if the borrows per year for each copy of
-    a book is less than 12 then that book will
-    be weed
+    if the borrows per year for each 
+    book is less than 12 then that book will
+    be signalled for removal.
+    
     for loop creates an array of books to be 
     weeded and books not to be weeded
     """
@@ -93,9 +94,12 @@ def bookweed():
     for i in range(len(book_count)):
 
         if borrows_per_year[i]!=0:        
-            if borrows_per_year[i] //book_count[i] <12:
+            if borrows_per_year[i]<12:
+
+                
                 weeded_books.append(book_titles[i])
                 weed_values.append(borrows_per_year[i])
+
 
             else:
                 books.append(book_titles[i])
@@ -109,13 +113,11 @@ def bookweed():
             
 
     
-    plt.plot(weeded_books,weed_values,"-r",label="Books to be removed")
-    plt.plot(books,book_values,"-b",label="Normal Books")
+    plt.bar(weeded_books,weed_values,color="red",label="Books to be removed")
+    plt.bar(books,book_values,color="blue",label="Normal Books")
     plt.legend(loc="upper left")
     plt.xlabel("Book Title")
     plt.ylabel("Borrows per Year")
     plt.title("Weeding")
     plt.show()
-
-
 
