@@ -2,7 +2,7 @@ import database as db
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbx
-from bookcheckout import IdExists,validISBN,validMemberID
+
 
 import datetime
 
@@ -15,19 +15,19 @@ def returnBook(isbn,id,member_id,member,display,arg):
     """
     library_db=db.readDatabase("database.txt")
     valid_results=[]
-    isbn_exists=IdExists(id,library_db)
-    member_exists=IdExists(member,library_db)
+    isbn_exists=db.IdExists(id,library_db)
+    member_exists=db.IdExists(member,library_db)
 
     if not isbn_exists:
         mbx.showerror("Error","Book ID does not exist")
 
-    elif not validISBN(id):
+    elif not db.validISBN(id):
         mbx.showerror("Error","Invalid Book ID")   
 
     elif not member_exists:
         mbx.showerror("Error","Member does not exist") 
 
-    elif not validMemberID(member):
+    elif not db.validMemberID(member):
         mbx.showerror("Error","Invalid Member ID")
 
 

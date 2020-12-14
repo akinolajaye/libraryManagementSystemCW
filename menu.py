@@ -27,13 +27,13 @@ def createFrames(window): #function to create all the frames that will be used
     main_frame=ttk.LabelFrame(window,text="LibrayManagmentSystem")
     main_frame.pack(fill="both") #organises the frame position on the window
 
-    data_frame=ttk.Frame(main_frame) #creates a frame to hold entry and display
+    data_frame=ttk.Frame(main_frame) #creates a frame to hold entry and display_box
     data_frame.pack(side=tk.TOP,fill='x')
 
     entry_frame=ttk.Frame(data_frame) #creates a frame to hold entry widgets
     entry_frame.pack(side=tk.LEFT,anchor='nw')
 
-    display_frame=ttk.Frame(data_frame) #creates a frame to hold display widget
+    display_frame=ttk.Frame(data_frame) #creates a frame to hold display_box widget
     display_frame.pack(side=tk.RIGHT,anchor='w')
 
     button_frame=ttk.Frame(main_frame)#creates a frame to hold buttons
@@ -66,7 +66,7 @@ def createEntrys(frame,w):#function to create entry field widgets
     title_entry.grid(row=1,column=1)
 
     search=ttk.Button(frame,text="Search",command=lambda:bsrch.searchBook\
-        ("Title",title_entry.get(),display))
+        ("Title",title_entry.get(),display_box,"database.txt"))
     #^^^ binds the function 'searchbook' to the button 'search')
     search.grid(row=1,column=2)
 
@@ -84,27 +84,27 @@ def createEntrys(frame,w):#function to create entry field widgets
 
 def createListbox(frame,w,h):
     """
-    creates a list box that will display data 
+    creates a list box that will display_box data 
     x and y scrollbar creates horizontal and vertical scrollbars
     and binds them to the list box
     """
 
-    display=tk.Listbox(frame,width=w,height=h)
-    yscrollbar= st.Scrollbar(frame,orient=tk.VERTICAL,command=display.yview)
-    xscrollbar= st.Scrollbar(frame,orient=tk.HORIZONTAL,command=display.xview)
-    display.configure(yscrollcommand=yscrollbar.set)
-    display.configure(yscrollcommand=yscrollbar.set)
+    display_box=tk.Listbox(frame,width=w,height=h)
+    yscrollbar= st.Scrollbar(frame,orient=tk.VERTICAL,command=display_box.yview)
+    xscrollbar= st.Scrollbar(frame,orient=tk.HORIZONTAL,command=display_box.xview)
+    display_box.configure(yscrollcommand=yscrollbar.set)
+    display_box.configure(yscrollcommand=yscrollbar.set)
     yscrollbar.pack(fill='y',side=tk.RIGHT)
     xscrollbar.pack(fill="x",side=tk.BOTTOM)
 
-    display.pack(side=tk.TOP,fill='both',expand=1)
+    display_box.pack(side=tk.TOP,fill='both',expand=1)
 
-    return display
+    return display_box
 
 def insertFromDisplay(event,widget,frame):
     """
     this is a function to insert data into the entry
-    fields when selected from the display box
+    fields when selected from the display_box box
     """
     try:
         j=0
@@ -125,31 +125,37 @@ def insertFromDisplay(event,widget,frame):
         pass
 
 
-def createButtons(frame,display):
+def createButtons(frame,display_box):
     """
     creates buttons that will perform functions
     for the program
     """
-
+    add=ttk.Button(frame,text="Add Book",command=lambda:db.addBook\
+    ("database.txt",display_box,entry_array))
+    add.grid(row=0,column=1)
 
     checkout=ttk.Button(frame,text="Checkout",command=lambda:bcheck.checkoutBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,display,entry_array))
-    checkout.grid(row=0,column=1)
+        ,display_box,entry_array))
+    checkout.grid(row=0,column=2)
 
 
     return_bk=ttk.Button(frame,text="Return",command=lambda:breturn.returnBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,display,entry_array))
-    return_bk.grid(row=0,column=2)
+        ,display_box,entry_array))
+    return_bk.grid(row=0,column=3)
 
     weed=ttk.Button(frame,text="Weed",command=lambda:bweed.bookweed())
 
-    weed.grid(row=0,column=3)
+    weed.grid(row=0,column=4)
+
+    display_data=ttk.Button(frame,text="Display",command=lambda:bsrch.displayBooks\
+    ("database.txt",display_box))
+    display_data.grid(row=0,column=5)
 
     exit=ttk.Button(frame,text="Exit",command=lambda:exitProgram(win,win_title))
     #^^^binds the function 'exitProgram' to the button 'exit')
-    exit.grid(row=0,column=4)
+    exit.grid(row=0,column=6)
 
  
 def exitProgram(window,title):
@@ -164,10 +170,16 @@ def exitProgram(window,title):
         window.destroy()
 
 
+
+
+
+    
+
+
 createWindow(win,win_title)#creates window
 
 entry_frame, display_frame,button_frame=createFrames(win)#creates frames
-
+    
 createLabels(entry_frame)#creates labels
 
 isbn_entry,title_entry,author_entry,purchase_date_entry,\
@@ -176,13 +188,14 @@ isbn_entry,title_entry,author_entry,purchase_date_entry,\
 entry_array=[i for i in entry_frame.winfo_children() if isinstance(i,ttk.Entry)]
 
 
-display=createListbox(display_frame,50,12)#creates listbox
-display.bind('<<ListboxSelect>>',\
-     lambda event:insertFromDisplay(event,display,entry_frame))  
+display_box=createListbox(display_frame,50,12)#creates listbox
+display_box.bind('<<ListboxSelect>>',\
+     lambda event:insertFromDisplay(event,display_box,entry_frame))  
 #^^^binds a function to the event when data in the list box gets selected
 #^^after data is selected on the list box it is inserted into entry fields
 
-createButtons(button_frame,display)#creates buttons
+createButtons(button_frame,display_box)#creates buttons
+
 
 
 win.mainloop()

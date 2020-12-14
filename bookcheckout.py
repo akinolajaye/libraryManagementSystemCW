@@ -4,40 +4,6 @@ from tkinter import ttk
 from tkinter import messagebox as mbx
 import re
 
-def IdExists(id,table):
-    """
-    This is a function to check if the isbn entered
-    exists within the database, return true if 
-    it does and false if it doesnt
-    """
-    count =1#count starts as 1 as 1st key in dict is 1
-    end=len(table)#gets the length of the dict thus num of records
-    
-    while count<=end:
-
-        if id in table[count].values():
-            return True
-        count+=1
-
-    return False
-
-
-def validMemberID(id):
-    if not re.match(r"^[0-9]{4}$",id):
-        return False
-
-    else:
-        return True
-
-
-def validISBN(id):
-    if not re.match(r"^[0-9]{13}$",id):
-        return False
-
-    else:
-        return True
-  
-
 
 
 
@@ -49,15 +15,15 @@ def checkoutBook(isbn,id,member_id,member,display,arg):
     """
     library_db=db.readDatabase("database.txt")
     valid_results=[]
-    isbn_exists=IdExists(id,library_db)
+    isbn_exists=db.IdExists(id,library_db)
 
     if not isbn_exists:
         mbx.showerror("Error","Book ID does not exist")
 
-    elif not validISBN(id):
+    elif not db.validISBN(id):
         mbx.showerror("Error","Invalid Book ID")   
 
-    elif not validMemberID(member):
+    elif not db.validMemberID(member):
         mbx.showerror("Error","Invalid Member ID")
     else:
 

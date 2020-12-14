@@ -1,5 +1,7 @@
 import datetime
-
+import tkinter as tk
+from tkinter import messagebox as mbx
+import re
 
 def readDatabase(filename):
     """
@@ -82,6 +84,69 @@ def getDate():
     return date
 
 
+
+def IdExists(id,table):
+    """
+    This is a function to check if the isbn entered
+    exists within the database, return true if 
+    it does and false if it doesnt
+    """
+    count =1#count starts as 1 as 1st key in dict is 1
+    end=len(table)#gets the length of the dict thus num of records
+    
+    while count<=end:
+
+        if id in table[count].values():
+            return True
+        count+=1
+
+    return False
+
+
+def validMemberID(id):
+    if not re.match(r"^[0-9]{4}$",id):
+        return False
+
+    else:
+        return True
+
+
+def validISBN(id):
+    if not re.match(r"^[0-9]{13}$",id):
+        return False
+
+    else:
+        return True
+  
+
+
+def addBook(filename,display,arg):
+    """
+    this is a function that allows the librarian
+    to add books to the data base
+    """
+    library_db=readDatabase(filename)
+    isbn=arg[0].get()#arg stores the variables for the entry widget
+    new_data={"ISBN":isbn,"Title":arg[1].get(),"Author":arg[2].get(),\
+        "Purchase Date":arg[3].get(),"Member ID":"0"}
+
+    if not validISBN(isbn):
+        mbx.showerror("Error","Invalid ISBN") 
+
+    elif IdExists(isbn,library_db):
+        mbx.showerror("Error","Book ISBN already exists") 
+    else:
+
+
+        library_db[(len(library_db)+1)]=new_data
+
+        writeDatabase(library_db,filename)
+
+        display.delete(0,tk.END)#emptys out the display box
+        display.insert(tk.END,list(new_data.values()))# inserts search results on the display box
+
+        for i in range(len(arg)):
+            arg[i].delete(0,tk.END)
 
 
 
