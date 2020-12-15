@@ -1,3 +1,5 @@
+#This Programme was written by Jayeola Akinola on 1st December 2020 - 7th December 2020
+
 import database as db
 import tkinter as tk
 from tkinter import ttk
@@ -7,13 +9,13 @@ import re
 
 
 
-def checkoutBook(isbn,id,member_id,member,display,arg):
+def checkoutBook(isbn,id,member_id,member,database_file,logfile,display,arg):
     
     """
     this is a function the check out books first by checking if the book
     is eligible to be checked out and thus updating the database accordingy
     """
-    library_db=db.readDatabase("database.txt")
+    library_db=db.readDatabase(database_file)
     valid_results=[]
     isbn_exists=db.IdExists(id,library_db)
 
@@ -36,32 +38,37 @@ def checkoutBook(isbn,id,member_id,member,display,arg):
                 library_db[i+1][member_id]=member#updates member id to checkout book
                 valid_results.append(list(library_db[i+1].values()))#appends > list
 
-        if valid_results==[]:
-            mbx.showerror("Error","Book has already been checked out")
+        if __name__ != "__main__":#only runs if the main program is running
+             
+
+            if valid_results==[]:
+                mbx.showerror("Error","Book has already been checked out")
+            else:
+                mbx.showinfo("Success!","Book has been loaned to member:%s"%(member))
+                display.delete(0,tk.END)#emptys out the display box
+                for i in valid_results:
+                    display.insert(tk.END,i)# inserts search results on the display box
+
+                for i in range(len(arg)):
+                    arg[i].delete(0,tk.END)
+
+        
+                log_db=checkoutLog(id,library_db,logfile)
+                db.writeDatabase(log_db,logfile)
+                db.writeDatabase(library_db,database_file)
+
         else:
-            mbx.showinfo("Success!","Book has been loaned to member:%s"%(member))
-            display.delete(0,tk.END)#emptys out the display box
-            for i in valid_results:
-                display.insert(tk.END,i)# inserts search results on the display box
-
-            for i in range(len(arg)):
-                arg[i].delete(0,tk.END)
-
-      
-            log_db=checkoutLog(id,library_db)
-            db.writeDatabase(log_db,"logfile.txt")
-            db.writeDatabase(library_db,"database.txt")
+            print(valid_results)
+            
+                
 
 
- 
-
-
-def checkoutLog(id,lib):
+def checkoutLog(id,lib,logfile):
     """
     this is a function to write data to a log dictionary 
     once a book is checked out
     """
-    log_db=db.readDatabase("logfile.txt")
+    log_db=db.readDatabase(logfile)
 
 
     for i in range(len(lib)):
@@ -91,13 +98,34 @@ def checkoutLog(id,lib):
                                      #borrows for the given book title
     log_db[len(log_db)]["Borrows"]=str(max(borrows)+1)#
 
+    if __name__ == "__main__":
+        print(log_db[len(log_db)])#use for testing the check out log 
+                                  # thats returned
+
         
     return log_db
             
 
 
 
+if __name__ == "__main__":
+    """
+    tests all the functions 
+    """
 
+    print("checkout Book (ISBN: 9783161484100 Member ID: 5432)")
+    print()
+    checkoutBook("ISBN","9783161484100","Member ID","5432","database.txt","logfile.txt",None,None)
+
+    print()
+    print("checkout Book (ISBN: 9783161484103 Member ID: 4933) <-Book that is checked out")
+    print()
+    checkoutBook("ISBN","9783161484103","Member ID","4933","database.txt","logfile.txt",None,None)
+
+
+    print()
+    print("checkout Log (ISBN: 9783161484103)")
+    checkoutLog("9783161484103",db.readDatabase("database.txt"),"logfile.txt")
 
 
 

@@ -1,3 +1,5 @@
+#This Programme was written by Jayeola Akinola on 1st December 2020 - 7th December 2020
+
 import datetime
 import tkinter as tk
 from tkinter import messagebox as mbx
@@ -46,6 +48,12 @@ def readDatabase(filename):
 
     else:
             file.close()
+    
+    if __name__ == "__main__":
+        for i in range(len(database)):
+            print(database[i+1])
+            
+    
     return database
 
 
@@ -81,9 +89,10 @@ def getDate():
     """
     date=str(datetime.date.today())
 
+    if __name__ == "__main__":
+        print(date)
+
     return date
-
-
 
 def IdExists(id,table):
     """
@@ -130,26 +139,71 @@ def addBook(filename,display,arg):
     new_data={"ISBN":isbn,"Title":arg[1].get(),"Author":arg[2].get(),\
         "Purchase Date":arg[3].get(),"Member ID":"0"}
 
-    if not validISBN(isbn):
-        mbx.showerror("Error","Invalid ISBN") 
+    if __name__ != "__main__":
 
-    elif IdExists(isbn,library_db):
-        mbx.showerror("Error","Book ISBN already exists") 
-    else:
+        if not validISBN(isbn):
+            mbx.showerror("Error","Invalid ISBN") 
 
-
-        library_db[(len(library_db)+1)]=new_data
-
-        writeDatabase(library_db,filename)
-
-        display.delete(0,tk.END)#emptys out the display box
-        display.insert(tk.END,list(new_data.values()))# inserts search results on the display box
-
-        for i in range(len(arg)):
-            arg[i].delete(0,tk.END)
+        elif IdExists(isbn,library_db):
+            mbx.showerror("Error","Book ISBN already exists") 
+        else:
 
 
+            library_db[(len(library_db)+1)]=new_data
+
+            writeDatabase(library_db,filename)
+
+            display.delete(0,tk.END)#emptys out the display box
+            
+            display.insert(tk.END,\
+                list(new_data.values()))# inserts search results on the display box
+
+            for i in range(len(arg)):
+                arg[i].delete(0,tk.END)
 
 
 
+
+
+
+if __name__ == "__main__": 
+    """
+    Tests all functions
+    """
+    print("Test that databse is read and converted to dict:")
+    print()
+    readDatabase("database.txt")
     
+    print()
+    print("Test getDate:")
+    getDate()
+
+    print()
+    print("Test ID Exists:")
+    print()
+    print("Exists 9783161484100:")
+    print(IdExists("9783161484100",readDatabase("database.txt")))
+    print()
+    print("Doesnt exist 978316100:")
+    print(IdExists("978316100",readDatabase("database.txt")))
+
+    print()
+    print("Test validMemberID:")
+    print()
+    print("Valid ID 3234")
+    print(validMemberID("3234"))
+
+    print()
+    print("Invalid ID - 32")
+    print(validMemberID("32"))
+
+
+    print()
+    print("Test valid ISBN:")
+    print()
+    print("Valid ISBN 9783161484100")
+    print(validISBN("9783161484100"))
+
+    print()
+    print("Invalid ISBN 9783161400")
+    print(validISBN("9783161400"))

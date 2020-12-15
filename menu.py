@@ -1,3 +1,6 @@
+
+#This Programme was written by Jayeola Akinola on 1st December 2020 - 7th December 2020
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import scrolledtext as st
@@ -136,13 +139,13 @@ def createButtons(frame,display_box):
 
     checkout=ttk.Button(frame,text="Checkout",command=lambda:bcheck.checkoutBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,display_box,entry_array))
+        ,"database.txt","logfile.txt",display_box,entry_array))
     checkout.grid(row=0,column=2)
 
 
     return_bk=ttk.Button(frame,text="Return",command=lambda:breturn.returnBook\
     ('ISBN',isbn_entry.get(),"Member ID",member_id_entry.get()\
-        ,display_box,entry_array))
+        ,"database.txt","logfile.txt",display_box,entry_array))
     return_bk.grid(row=0,column=3)
 
     weed=ttk.Button(frame,text="Weed",command=lambda:bweed.bookweed())
@@ -197,5 +200,6 @@ display_box.bind('<<ListboxSelect>>',\
 createButtons(button_frame,display_box)#creates buttons
 
 
-
-win.mainloop()
+if __name__ == "__main__":
+    
+    win.mainloop()

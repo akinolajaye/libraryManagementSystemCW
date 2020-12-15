@@ -1,3 +1,5 @@
+#This Programme was written by Jayeola Akinola on 1st December 2020 - 7th December 2020
+
 import numpy as np
 import matplotlib.pyplot as plt
 import database as db
@@ -121,3 +123,9 @@ def bookweed():
     plt.title("Weeding")
     plt.show()
 
+
+
+if __name__ == "__main__":#test the function
+    bookweed()
+else:
+    pass
